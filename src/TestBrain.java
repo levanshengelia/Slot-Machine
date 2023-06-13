@@ -61,7 +61,7 @@ public class TestBrain {
         Brain brain1 = new Brain(new double[]{1, 10, 100, 1000, 10000});
         roll(brain1, 1000000, 50.0, 50, DELTA * 50);
         Brain brain2 = new Brain(new double[]{1, 2, 3, 4, 5});
-        roll(brain1, 1000000, 19, 20, DELTA * 19);
+        roll(brain2, 1000000, 19, 20, DELTA * 19);
     }
 
     @Test
@@ -71,7 +71,7 @@ public class TestBrain {
         Brain brain1 = new Brain(new double[]{1, 2, 1, 2, 1});
         roll(brain1, 1000000, 1000, 100, DELTA * 1000);
         Brain brain2 = new Brain(new double[]{123, 123, 123, 123, 123});
-        roll(brain1, 1000000, 1234, 88, DELTA * 1234);
+        roll(brain2, 1000000, 1234, 88, DELTA * 1234);
     }
 
     // This method makes the rolling simulation and check mathematical expectation in the end
