@@ -24,4 +24,22 @@ public class Database {
     public static void deleteEntry(int id) throws SQLException {
         statement.executeUpdate("DELETE FROM game_history WHERE id = " + id);
     }
+
+    // Retrieves from database the number of players that have played slot machine at lease once for each month
+    public static int[] playersInEachMonth() {
+        int[] res = new int[12];
+        return res;
+    }
+
+    // Retrieves from database the amount of money that is bet by players in total for each month
+    public static int[] betMoneyEachMonth() {
+        int[] res = new int[12];
+        return res;
+    }
+
+    // Retrieves from database the amount of money that is won by players in total for each month
+    public static int[] wonMoneyEachMonth() {
+        int[] res = new int[12];
+        return res;
+    }
 }
