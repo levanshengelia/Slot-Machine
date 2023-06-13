@@ -74,7 +74,7 @@ public class TestBrain {
         roll(brain1, 1000000, 1234, 88, DELTA * 1234);
     }
 
-    // Rolling simulation
+    // This method makes the rolling simulation and check mathematical expectation in the end
     private void roll(Brain brain, int simulationNum, double bet, int RSP, double deviation) {
         double win = 0;
         for(int i = 0; i < simulationNum; i++) {
