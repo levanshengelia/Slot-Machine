@@ -3,8 +3,8 @@ import java.sql.*;
 
 public class Database {
     private static final String URL = "jdbc:mysql://localhost:3306/slot_machine_database";
-    private static final String USERNAME = "root"; // Change this to your MYSQL server username
-    private static final String PASSWORD = "levani"; // Change this to your MYSQL server password
+    private static final String USERNAME = "root"; // Change this to your MySQL server username
+    private static final String PASSWORD = "levani"; // Change this to your MySQL server password
     private static Connection connection;
     private static Statement statement;
 
@@ -23,9 +23,5 @@ public class Database {
     // Deletes entry from game_history database
     public static void deleteEntry(int id) throws SQLException {
         statement.executeUpdate("DELETE FROM game_history WHERE id = " + id);
-    }
-
-    public static void main(String[] args) throws SQLException {
-        Database.connectToDatabase();
     }
 }

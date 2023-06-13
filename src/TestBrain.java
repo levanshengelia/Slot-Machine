@@ -3,10 +3,8 @@ import org.junit.Test;
 import static org.junit.Assert.assertEquals;
 
 public class TestBrain {
-
     private static final double EPSILON = 0.0000001;
     private static final double DELTA = 0.1;
-
 
     // Test the calculateWin method in Brain class when player wins
     @Test
