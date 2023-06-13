@@ -1,27 +1,63 @@
 import java.util.Scanner;
 
+import static java.lang.Thread.sleep;
+
 public class SlotStarter {
     private static final int INITIAL_MONEY = 100;
     private static final int MINIMUM_BET = 1;
     private static final int RTP = 95; // Return to player
     private static final double[] COEFFICIENTS = { 2, 5, 10, 100, 1000 };
-    public static void main(String[] args) {
+    public static void main(String[] args) throws InterruptedException {
         printInstructions();
         start();
     }
 
     // This method makes a simulation of playing process, placing bet and calculating win after each round
-    private static void start() {
+    private static void start() throws InterruptedException {
         double balance = INITIAL_MONEY;
         Brain brain = new Brain(COEFFICIENTS);
         while (true) {
-            int bet = placeBet(balance);
+            double bet = placeBet(balance);
             balance -= bet;
             char[][] slot = brain.rollSlotMachine(RTP);
+            printTheSlot(slot);
+            sleep(2);
             double win = brain.calculateWin(slot, bet);
             balance += win;
+            printWinningMessage(win, balance, bet);
             if(balance < MINIMUM_BET) break;
+            if(!askToContinue(balance)) return;
         }
+        System.out.println("You don't have the minimum amount of money to bet");
+    }
+
+    // Displays the slot machine on console
+    private static void printTheSlot(char[][] slot) {
+        for(int i = 0; i < 3; i++) {
+            for(int j = 0; j < 3; j++) {
+                System.out.print(" " + slot[i][j]);
+            }
+            System.out.println();
+        }
+    }
+
+    // Ask and wait for player to decide if he wants to continue the game
+    private static boolean askToContinue(double balance) {
+        Scanner scanner = new Scanner(System.in);
+        while(true) {
+            System.out.print("Enter 'Y' or 'N' if you want to continue or not: ");
+            char c = scanner.next().charAt(0);
+            if (c == 'Y' || c == 'y') return true;
+            if (c == 'N' || c == 'n') return false;
+        }
+    }
+
+    // Informs player if he won or lost
+    private static void printWinningMessage(double win, double balance, double bet) {
+        if(win == 0.0)
+            System.out.println("You lost, your current balance is: " + balance);
+        else
+            System.out.println("You won " + win / bet + "x, your current balance is: " + balance);
     }
 
     // This method allow player to make a bet. Checks if the bet is valid
