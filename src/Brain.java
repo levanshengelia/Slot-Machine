@@ -33,6 +33,7 @@ public class Brain {
         return res;
     }
 
+    // Method fills the middle row of the matrix based on combination probabilities
     private void fillMiddleRow(char[][] res, int RTP, char[] charSet) {
         double randNum = rand.nextDouble();
         double[] probabilitiesPrefixSum = getPrefixSum(getProbabilities(RTP));
