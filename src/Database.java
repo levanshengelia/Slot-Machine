@@ -129,7 +129,7 @@ public class Database {
     private void create() throws SQLException {
         statement.executeUpdate("CREATE DATABASE IF NOT EXISTS " + dbName);
         statement.executeUpdate("USE " + dbName);
-        statement.executeUpdate("CREATE TABLE IF NOT EXISTS game_history (\n" +
+        statement.executeUpdate("CREATE TABLE IF NOT EXISTS "+ TABLE_NAME + "(\n" +
                 "        ID INT NOT NULL AUTO_INCREMENT,\n" +
                 "        Name VARCHAR(20) NOT NULL,\n" +
                 "        Bet DOUBLE NOT NULL,\n" +
