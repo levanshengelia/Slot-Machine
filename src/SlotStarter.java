@@ -1,3 +1,5 @@
+import javax.xml.crypto.Data;
+import java.sql.SQLException;
 import java.util.Scanner;
 
 import static java.lang.Thread.sleep;
@@ -7,24 +9,25 @@ public class SlotStarter {
     private static final int MINIMUM_BET = 1;
     private static final int RTP = 95; // Return to player
     private static final double[] COEFFICIENTS = { 2, 5, 10, 100, 1000 };
-    public static void main(String[] args) throws InterruptedException {
+    public static void main(String[] args) throws InterruptedException, SQLException {
         printInstructions();
         start();
     }
 
     // This method makes a simulation of playing process, placing bet and calculating win after each round
-    private static void start() throws InterruptedException {
+    private static void start() throws InterruptedException, SQLException {
         double balance = INITIAL_MONEY;
         Brain brain = new Brain(COEFFICIENTS);
         while (true) {
-            double bet = placeBet(balance);
-            balance -= bet;
+            Entry entry = new Entry();
+            entry.setBet(placeBet(balance));
+            balance -= entry.getBet();
             char[][] slot = brain.rollSlotMachine(RTP);
             printTheSlot(slot);
             sleep(2);
-            double win = brain.calculateWin(slot, bet);
-            balance += win;
-            printWinningMessage(win, balance, bet);
+            entry.setWin(brain.calculateWin(slot, entry.getBet()));
+            balance += entry.getWin();
+            printWinningMessage(entry.getWin(), balance, entry.getBet());
             if(balance < MINIMUM_BET) break;
             if(!askToContinue(balance)) return;
         }
