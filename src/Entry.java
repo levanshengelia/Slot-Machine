@@ -46,6 +46,7 @@ public class Entry {
         this.time = time;
     }
 
+    // get the copy of the instance variable
     public LocalDateTime getTime() {
         return LocalDateTime.of(time.getYear(), time.getMonth(), time.getDayOfMonth(), time.getHour(), time.getMinute());
     }

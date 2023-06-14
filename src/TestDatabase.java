@@ -22,7 +22,11 @@ public class TestDatabase {
         cleanDatabase();
     }
 
-    // Test addEntry() method in database
+    /*
+     * This method tests the addEntry() and getAllEntry() methods in the Database class.
+     * It adds 100 Entry objects to the test database and retrieves them using getAllEntry().
+     * It then compares the retrieved entries to the original entries to ensure they match.
+     */
     @Test
     public void testAddEntry() throws SQLException {
         List<Entry> entries = new ArrayList<>();
@@ -40,6 +44,12 @@ public class TestDatabase {
         }
     }
 
+    /*
+     * This method tests the playersInMonth() method in the Database class.
+     * It adds 100 Entry objects to the test database with the current month as their time
+     * and calls playersInMonth() with the current month as the argument. It then compares
+     * the returned value to the expected value of 100.
+     */
     @Test
     public void testPlayersInMonth0() throws SQLException {
         for(int i = 0; i < 100; i++) {
@@ -49,6 +59,14 @@ public class TestDatabase {
         assertEquals(100, testDatabase.playersInMonth(LocalDate.now().getMonth()));
     }
 
+    /*
+     * This method tests the playersInMonth() method in the Database class.
+     * It adds 10 Entry objects to the test database with the current month as their
+     * time and the same name, bet, and win values. It then adds another Entry object
+     * with a different name and higher bet and win values. It calls playersInMonth() twice,
+     * first with the current month as the argument and then again after adding the new entry.
+     * It compares the returned values to ensure they match the expected values.
+     */
     @Test
     public void testPlayersInMonth1() throws SQLException {
         for(int i = 0; i < 10; i++) {
@@ -59,6 +77,12 @@ public class TestDatabase {
         assertEquals(2, testDatabase.playersInMonth(LocalDate.now().getMonth()));
     }
 
+    /*
+     * This method tests the playersInMonth() method in the Database class.
+     * It adds 10 Entry objects to the test database with the month of June as their time.
+     * It then calls playersInMonth() for each month of the year and compares the returned
+     * values to ensure they match the expected values.
+     */
     @Test
     public void testPlayersInMonth2() throws SQLException {
         for(int i = 0; i < 10; i++) {
@@ -78,6 +102,13 @@ public class TestDatabase {
         assertEquals(0, testDatabase.playersInMonth(Month.DECEMBER));
     }
 
+    /*
+     * This method tests the betInMonth() method in the Database class. It adds 100 Entry objects
+     * to the test database with the month of April as their time and a bet value of 2.
+     * It then adds 200 more Entry objects with the month of March as their time and a bet value of 4.
+     * It calls betInMonth() twice, first with April as the argument and then again with March as the argument.
+     * It compares the returned values to ensure they match the expected values.
+     */
     @Test
     public void testBetInMonth0() throws SQLException {
         for(int i = 0; i < 100; i++) {
@@ -90,6 +121,15 @@ public class TestDatabase {
         assertEquals(800, testDatabase.betInMonth(Month.MARCH));
     }
 
+    /*
+     * This method tests the betInMonth() method in the Database class. It adds 100 Entry
+     * objects to the test database with the month of June and a bet value of 1000, and 50
+     * Entry objects to the test database with the month of December and a bet value of 1.
+     * It then calls betInMonth() for each month of the year and compares the returned values
+     * to ensure they match the expected values. Specifically, it asserts that the total bet
+     * amount for June is 100000 and the total bet amount for December is 50, while the total
+     * bet amount for all other months is 0.
+     */
     @Test
     public void testBetInMonth1() throws SQLException {
         for(int i = 0; i < 100; i++) {
@@ -112,6 +152,13 @@ public class TestDatabase {
         assertEquals(50, testDatabase.betInMonth(Month.DECEMBER));
     }
 
+    /*
+     * This method tests the winInMonth() method in the Database class. It adds 100 Entry
+     * objects to the test database with the month of April as their time and a win value of 100.
+     * It then adds 200 more Entry objects with the month of March as their time and a win value of 200.
+     * It calls winInMonth() twice, first with April as the argument and then again with March as
+     * the argument. It compares the returned values to ensure they match the expected values.
+     */
     @Test
     public void testWinInMonth0() throws SQLException {
         for(int i = 0; i < 100; i++) {
@@ -124,6 +171,13 @@ public class TestDatabase {
         assertEquals(40000, testDatabase.winInMonth(Month.MARCH));
     }
 
+    /*
+     * This method tests the winInMonth() method in the Database class.
+     * It adds 100 Entry objects to the test database with the month of June as their time and a win value of 30.
+     * It then adds 50 more Entry objects with the month of December as their time and a win value of 12.
+     * It calls winInMonth() twice, first with June as the argument and then again with December as the argument.
+     * It compares the returned values to ensure they match the expected values.
+     */
     @Test
     public void testWinInMonth1() throws SQLException {
         for(int i = 0; i < 100; i++) {
@@ -146,10 +200,19 @@ public class TestDatabase {
         assertEquals(600, testDatabase.winInMonth(Month.DECEMBER));
     }
 
+    /*
+     * This method generates a LocalDate object representing the current date.
+     * It is used by several of the test methods to set the time for the Entry objects that
+     * are added to the test database.
+     */
     private LocalDateTime getDate(Month month) {
         return LocalDateTime.of(2023, month, 1, 0, 0);
     }
 
+    /*
+     * This method is annotated with @After and is executed after each test method.
+     * It clears all the entries from the test database to ensure that each test method starts with a clean slate.
+     */
     @After
     public void cleanDatabase() throws SQLException {
         testDatabase.cleanDatabase();

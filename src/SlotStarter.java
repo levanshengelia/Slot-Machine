@@ -1,31 +1,76 @@
-import javax.xml.crypto.Data;
 import java.sql.SQLException;
+import java.time.LocalDateTime;
+import java.time.Month;
 import java.util.Scanner;
-
-import static java.lang.Thread.sleep;
 
 public class SlotStarter {
     private static final int INITIAL_MONEY = 100;
     private static final int MINIMUM_BET = 1;
     private static final int RTP = 95; // Return to player
+    private static final String DATABASE_NAME = "slot_machine_database";
     private static final double[] COEFFICIENTS = { 2, 5, 10, 100, 1000 };
+
+    /*
+     * This is the entry point of the program. It initializes the database, prints the instructions,
+     * starts the game, and asks the user if they want to display the statistics.
+     */
     public static void main(String[] args) throws InterruptedException, SQLException {
+        Database db = new Database(DATABASE_NAME);
         printInstructions();
-        start();
+        start(db);
+        askForStatistics(db);
     }
 
-    // This method makes a simulation of playing process, placing bet and calculating win after each round
-    private static void start() throws InterruptedException, SQLException {
+    /*
+     * This method asks the user if they want to display the statistics and calls the
+     * displayStatistics method if they answer yes.
+     */
+    private static void askForStatistics(Database db) throws SQLException {
+        Scanner sc = new Scanner(System.in);
+        System.out.print("Do you want to display slot machine statistics?\n" +
+                "Enter 'Y' or 'N': ");
+        char c = sc.next().charAt(0);
+        if(c == 'Y' || c == 'y')
+            displayStatistics(db);
+    }
+
+    /*
+     * This method displays the statistics for each month using the Database object passed
+     * as a parameter. It prints the number of different players who played the slot machine,
+     * the total amount of money bet, and the total amount of money won for each month.
+     */
+    private static void displayStatistics(Database db) throws SQLException {
+        System.out.println();
+        for(Month month : Month.values()) {
+            System.out.println(month.toString() + ":");
+            System.out.println(db.playersInMonth(month) + " different players played slot machine");
+            System.out.println(db.betInMonth(month) + " GEL bet was made in total");
+            System.out.println(db.winInMonth(month) + " GEL was won by players in total\n");
+        }
+    }
+
+    /*
+     * This method begins the slot machine game. It initializes the player's balance, gets
+     * their name, and enters a loop where the player can place bets and play the game.
+     * Each time the player makes a bet, the method updates the player's balance,
+     * rolls the slot machine, calculates the winnings, and adds an entry to the database.
+     */
+    private static void start(Database db) throws SQLException {
         double balance = INITIAL_MONEY;
         Brain brain = new Brain(COEFFICIENTS);
+        Scanner scanner = new Scanner(System.in);
+        System.out.print("Enter your name: ");
+        String name = scanner.next();
         while (true) {
             Entry entry = new Entry();
+            entry.setName(name);
             entry.setBet(placeBet(balance));
             balance -= entry.getBet();
             char[][] slot = brain.rollSlotMachine(RTP);
             printTheSlot(slot);
-            sleep(2);
             entry.setWin(brain.calculateWin(slot, entry.getBet()));
+            entry.setTime(LocalDateTime.now());
+            db.addEntry(entry);
             balance += entry.getWin();
             printWinningMessage(entry.getWin(), balance, entry.getBet());
             if(balance < MINIMUM_BET) break;
@@ -34,7 +79,9 @@ public class SlotStarter {
         System.out.println("You don't have the minimum amount of money to bet");
     }
 
-    // Displays the slot machine on console
+    /*
+     * This method is a helper method that prints the slot machine on the console.
+     */
     private static void printTheSlot(char[][] slot) {
         for(int i = 0; i < 3; i++) {
             for(int j = 0; j < 3; j++) {
@@ -44,7 +91,10 @@ public class SlotStarter {
         }
     }
 
-    // Ask and wait for player to decide if he wants to continue the game
+    /*
+     * This method asks the user if they want to continue playing the game and
+     * returns true or false depending on their answer.
+     */
     private static boolean askToContinue(double balance) {
         Scanner scanner = new Scanner(System.in);
         while(true) {
@@ -55,7 +105,10 @@ public class SlotStarter {
         }
     }
 
-    // Informs player if he won or lost
+    /*
+     * This method prints a message to the console depending on whether the player
+     * won or lost and updates their balance accordingly.
+     */
     private static void printWinningMessage(double win, double balance, double bet) {
         if(win == 0.0)
             System.out.println("You lost, your current balance is: " + balance);
@@ -63,7 +116,9 @@ public class SlotStarter {
             System.out.println("You won " + win / bet + "x, your current balance is: " + balance);
     }
 
-    // This method allow player to make a bet. Checks if the bet is valid
+    /*
+     * This method asks the user to place a bet and returns the amount of money they bet.
+     */
     private static int placeBet(double balance) {
         Scanner scanner = new Scanner(System.in);
         while(true) {
@@ -77,7 +132,9 @@ public class SlotStarter {
         }
     }
 
-    // Giving player the instruction about how to play the game before placing the first bet
+    /*
+     * This method prints the instructions for how to play the game to the console.
+     */
     private static void printInstructions() {
         System.out.println("\nWelcome to the slot game!\n\n" +
                 "Here's how to play:\n\n" +

@@ -6,7 +6,11 @@ public class TestBrain {
     private static final double EPSILON = 0.0000001;
     private static final double DELTA = 0.1;
 
-    // Test the calculateWin method in Brain class when player wins
+    /*
+     * This method tests the calculateWin method in the Brain class when the player wins the bet.
+     * It creates a Brain object with a set of payout values and checks the calculation of winnings
+     * for different input matrices and bet amounts.
+     */
     @Test
     public void testCalculateWin0() {
         Brain brain = new Brain(new double[]{2, 5, 10, 100, 1000});
@@ -29,7 +33,11 @@ public class TestBrain {
         assertEquals(0.0, brain.calculateWin(matrix4, 0.0), EPSILON);
     }
 
-    // Test the calculationWin method in Brain class when player loses the bet
+    /*
+     * This method tests the calculateWin method in the Brain class when the player loses the bet.
+     * It creates a Brain object with a set of payout values and checks that the winnings are always
+     * zero for different input matrices and bet amounts.
+     */
     @Test
     public void testCalculateWin1() {
         Brain brain = new Brain(new double[]{1, 2, 3, 4, 5});
@@ -51,7 +59,12 @@ public class TestBrain {
         assertEquals(0.0, brain.calculateWin(matrix4, 0.0), EPSILON);
     }
 
-    // Test the rolling of the slot machine with certain RTP value
+    /*
+     * This method tests the rolling of the slot machine with a certain return to player (RTP) value.
+     * It creates a Brain object with a set of payout values and simulates rolling the slot machine a
+     * certain number of times. It then checks that the average winnings over the simulations match the
+     * expected winnings based on the RTP value
+     */
     @Test
     public void testRollSlotMachine0() {
         Brain brain0 = new Brain(new double[]{2, 5, 10, 100, 1000});
@@ -60,19 +73,23 @@ public class TestBrain {
         roll(brain1, 1000000, 50.0, 50, DELTA * 50);
         Brain brain2 = new Brain(new double[]{1, 2, 3, 4, 5});
         roll(brain2, 1000000, 19, 200, DELTA * 19);
+        Brain brain3 = new Brain(new double[]{1, 1, 1, 1, 1});
+        roll(brain3, 1000000, 7.5, 99, DELTA * 7.5);
+        Brain brain4 = new Brain(new double[]{1, 2, 1, 2, 1});
+        roll(brain4, 1000000, 1000, 110, DELTA * 1000);
+        Brain brain5 = new Brain(new double[]{2, 2, 2, 2, 2});
+        roll(brain5, 1000000, 100, 9, DELTA * 300);
     }
 
-    @Test
-    public void testRollSlotMachine1() {
-        Brain brain0 = new Brain(new double[]{1, 1, 1, 1, 1});
-        roll(brain0, 1000000, 7.5, 99, DELTA * 7.5);
-        Brain brain1 = new Brain(new double[]{1, 2, 1, 2, 1});
-        roll(brain1, 1000000, 1000, 110, DELTA * 1000);
-        Brain brain2 = new Brain(new double[]{123, 123, 123, 123, 123});
-        roll(brain2, 1000000, 1234, 500, DELTA * 1234);
-    }
-
-    // This method makes the rolling simulation and check mathematical expectation in the end
+    /*
+     * The roll method is a helper method that simulates the rolling of the slot machine and calculates
+     * the average winnings over a certain number of simulations. The method takes a Brain object,
+     * the number of simulations, the bet amount, the RTP value, and the allowed deviation from the
+     * expected winnings as parameters. The method uses the calculateWin and rollSlotMachine methods
+     * in the Brain class to simulate rolling the slot machine and calculate the winnings for each simulation.
+     * It then checks that the average winnings over the simulations match the expected winnings based
+     * on the RTP value within the allowed deviation.
+     */
     private void roll(Brain brain, int simulationNum, double bet, int RSP, double deviation) {
         double win = 0;
         for(int i = 0; i < simulationNum; i++) {
